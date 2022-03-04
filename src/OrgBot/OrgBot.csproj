@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Worker">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>dotnet-OrgBot-B067042A-0B6D-478B-8991-F44EA60C7398</UserSecretsId>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <DockerfileContext>..\..</DockerfileContext>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\..\.editorconfig" Link=".editorconfig" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CXuesong.MW.WikiClientLibrary" Version="0.7.5" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Bots.Core\Bots.Core.csproj" />
+  </ItemGroup>
+</Project>
