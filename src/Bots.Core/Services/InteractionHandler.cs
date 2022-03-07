@@ -60,6 +60,7 @@ internal class InteractionHandler : DiscordShardedClientService
     {
         if (!result.IsSuccess)
         {
+            Logger.LogError($"[{nameof(ContextCommandExecuted)}] {result.Error} {result.ErrorReason}");
             switch (result.Error)
             {
                 case InteractionCommandError.UnmetPrecondition:
@@ -89,6 +90,7 @@ internal class InteractionHandler : DiscordShardedClientService
     {
         if (!result.IsSuccess)
         {
+            Logger.LogError($"[{nameof(ContextCommandExecuted)}] {result.Error} {result.ErrorReason}");
             switch (result.Error)
             {
                 case InteractionCommandError.UnmetPrecondition:
@@ -150,7 +152,6 @@ internal class InteractionHandler : DiscordShardedClientService
     {
         try
         {
-            // Create an execution context that matches the generic type parameter of your InteractionModuleBase<T> modules
             var ctx = new ShardedInteractionContext(Client, arg);
             await _interactionService.ExecuteCommandAsync(ctx, _provider);
         }

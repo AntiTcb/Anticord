@@ -1,4 +1,5 @@
 ﻿using Bots.Core.Services;
+using Bots.Core.Services.Scripting;
 using Discord;
 using Discord.Addons.Hosting;
 using Discord.Interactions;
@@ -44,6 +45,7 @@ public class DiscordBotBase
             .ConfigureServices((_, services) =>
             {
                 services.AddHostedService<InteractionHandler>();
+                services.AddSingleton<ScriptService>();
             });
     }
     public IHost CreateDiscordBotHost(string[]? args = null)

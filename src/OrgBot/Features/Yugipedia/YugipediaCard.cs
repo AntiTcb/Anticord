@@ -1,10 +1,9 @@
-﻿using System.Text;
-using System.Text.RegularExpressions;
-using Bots.Core.Extensions;
-using Discord;
-using static Discord.Format;
-using Newtonsoft.Json;
+﻿using Discord;
 using Humanizer;
+using Newtonsoft.Json;
+using System.Text;
+using System.Text.RegularExpressions;
+using static Discord.Format;
 
 namespace OrgBot.Modules.Yugipedia;
 
@@ -51,7 +50,7 @@ public class YugipediaCard
     [JsonProperty("tcg_status")]
     public string TcgStatus { get; set; } = null!;
     [JsonProperty("types")]
-    public string Types { get; set; } = null!;
+    public string? Types { get; set; }
 
     public int? LinkRating => LinkArrows?.Split(',')?.Length;
     public string Description => Format.ResolveMarkup(DescriptionRaw);
@@ -60,10 +59,10 @@ public class YugipediaCard
 
     public Embed ToEmbed()
     {
-        bool isPend = Types.Contains("Pendulum", StringComparison.OrdinalIgnoreCase);
-        bool isXyz = Types.Contains("Xyz", StringComparison.OrdinalIgnoreCase);
-        bool isLink = Types.Contains("Link", StringComparison.OrdinalIgnoreCase);
-        bool isSynchro = Types.Contains("Synchro", StringComparison.OrdinalIgnoreCase);
+        bool isPend = Types?.Contains("Pendulum", StringComparison.OrdinalIgnoreCase) ?? false;
+        bool isXyz = Types?.Contains("Xyz", StringComparison.OrdinalIgnoreCase) ?? false;
+        bool isLink = Types?.Contains("Link", StringComparison.OrdinalIgnoreCase) ?? false;
+        bool isSynchro = Types?.Contains("Synchro", StringComparison.OrdinalIgnoreCase) ?? false;
         bool isSpellOrTrap = !string.IsNullOrWhiteSpace(CardType);
 
         var descriptionBuilder = new StringBuilder(ZERO_WIDTH_SPACE);
