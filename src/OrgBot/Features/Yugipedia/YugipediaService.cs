@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 using WikiClientLibrary.Pages;
 using WikiClientLibrary.Sites;
 
-namespace OrgBot.Modules.Yugipedia;
+namespace OrgBot.Features.Yugipedia;
 
 public class YugipediaService
 {

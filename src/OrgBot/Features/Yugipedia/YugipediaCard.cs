@@ -5,7 +5,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using static Discord.Format;
 
-namespace OrgBot.Modules.Yugipedia;
+namespace OrgBot.Features.Yugipedia;
 
 public class YugipediaCard
 {

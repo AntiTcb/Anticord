@@ -1,5 +1,5 @@
 using Serilog;
-using Bot = OrgBot.OrgBot;
+using Bot = WiseOldBot.WiseOldBot;
 
 try
 {

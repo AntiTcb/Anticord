@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace OrgBot.Modules.YugiohPrices.Api;
+namespace OrgBot.Features.YugiohPrices.Api.Models;
 
 public record CardSet(
     [property: JsonProperty("name")] string Name,

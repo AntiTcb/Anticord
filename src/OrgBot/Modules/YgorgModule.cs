@@ -6,7 +6,7 @@ namespace OrgBot.Modules;
 public class YgorgModule : InteractionModuleBase<ShardedInteractionContext>
 {
     [SlashCommand("latest_article", "Gets the latest article posted to YGOrganization.com")]
-    public async Task GetLatestArticleASync()
+    public async Task GetLatestArticleAsync()
     {
         using var c = new HttpClient();
         string json = await c.GetStringAsync("https://ygorganization.com/wp-json/wp/v2/posts/?per_page=1");
@@ -14,5 +14,5 @@ public class YgorgModule : InteractionModuleBase<ShardedInteractionContext>
         await RespondAsync(dummyModel?.Link ?? "Latest article could not be found.");
     }
 
-    internal record struct PostsModel(string Link);
+    internal readonly record struct PostsModel(string Link);
 }

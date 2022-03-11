@@ -1,14 +1,14 @@
 using System.Reflection;
 using Bots.Core;
-using OrgBot.Modules.YugiohPrices.Api;
-using OrgBot.Modules.Yugipedia;
+using OrgBot.Features.YugiohPrices.Api;
+using OrgBot.Features.Yugipedia;
 using RestEase.HttpClientFactory;
 using WikiClientLibrary.Client;
 using WikiClientLibrary.Sites;
 
 namespace OrgBot;
 
-public class OrgBotDiscordBot : DiscordBotBase
+public class OrgBot : DiscordBotBase
 {
     protected override IHostBuilder CreateBotHostBuilder(string[]? args = null)
     {

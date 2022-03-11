@@ -1,6 +1,7 @@
-﻿using RestEase;
+﻿using OrgBot.Features.YugiohPrices.Api.Models;
+using RestEase;
 
-namespace OrgBot.Modules.YugiohPrices.Api;
+namespace OrgBot.Features.YugiohPrices.Api;
 
 [BaseAddress("https://yugiohprices.com/api/")]
 public interface IYugiohPricesApi

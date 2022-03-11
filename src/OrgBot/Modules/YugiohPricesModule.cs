@@ -1,8 +1,8 @@
 ﻿using Discord;
 using Discord.Interactions;
-using OrgBot.Modules.YugiohPrices.Api;
+using OrgBot.Features.YugiohPrices.Api;
 
-namespace OrgBot.Modules.YugiohPrices;
+namespace OrgBot.Modules;
 
 public class YugiohPricesModule : InteractionModuleBase<ShardedInteractionContext>
 {

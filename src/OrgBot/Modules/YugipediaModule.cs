@@ -1,7 +1,8 @@
 ﻿using Discord;
 using Discord.Interactions;
+using OrgBot.Features.Yugipedia;
 
-namespace OrgBot.Modules.Yugipedia;
+namespace OrgBot.Modules;
 
 public class YugipediaModule : InteractionModuleBase<ShardedInteractionContext>
 {
