@@ -46,6 +46,7 @@ public class DiscordBotBase
             {
                 services.AddHostedService<InteractionHandler>();
                 services.AddSingleton<ScriptService>();
+                services.AddSingleton<Fergun.Interactive.InteractiveService>();
             });
     }
     public IHost CreateDiscordBotHost(string[]? args = null)
