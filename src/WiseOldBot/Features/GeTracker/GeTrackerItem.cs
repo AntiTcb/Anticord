@@ -12,13 +12,13 @@ public readonly record struct GeTrackerItem (
     bool IsBuyPriceCurrent,
     int BuyingPrice,
     int BuyingQuantity,
-    DateTimeOffset CachedUntil,
+    DateTime CachedUntil,
     int HighAlchemyValue,
     string IconUrl,
     int? Id,
     int ItemId,
-    DateTimeOffset? LastBuyTime,
-    DateTimeOffset? LastSellTime,
+    DateTime? LastBuyTime,
+    DateTime? LastSellTime,
     int LowAlchemyValue,
     bool IsMembersItem,
     string Name,
@@ -27,7 +27,7 @@ public readonly record struct GeTrackerItem (
     int SellingPrice,
     int SellingQuantity,
     int TaxAmount,
-    DateTimeOffset? LastUpdatedAt,
+    DateTime? LastUpdatedAt,
     string Url,
     string? WikiUrl)
 {
@@ -60,7 +60,7 @@ public readonly record struct GeTrackerItem (
     public string OsrsExchangeUrl => $"http://services.runescape.com/m=itemdb_oldschool/Runescape/viewitem?obj={ItemId}";
     public string RsbExchangeUrl => $"https://rsbuddy.com/exchange?id={ItemId}";
     public string OsrsWikiUrl => $"https://os.rs.wiki/w/{Name.Replace(" ", "_")}";
-    public string SpriteUrl => $"https://services.runescape.com/m=itemdb_rs/obj_sprite.gif?id={ItemId}";
+    public string SpriteUrl => $"https://services.runescape.com/m=itemdb_oldschool/obj_sprite.gif?id={ItemId}";
     public string OsrsWikiExchangeUrl => $"https://prices.runescape.wiki/osrs/item/{ItemId}";
 
     public GeTrackerItem Update(Item updatedItem)
@@ -92,19 +92,18 @@ public readonly record struct GeTrackerItem (
     {
         var eb = new EmbedBuilder()
         .WithTitle($"{Name} (ID: {ItemId})")
-        .WithDescription($"[GE-Tracker]({Url}) | [OSRS Exchange]({OsrsExchangeUrl}) | [RSB Exchange]({RsbExchangeUrl}) | [2007 Wiki]({WikiUrl ?? OsrsWikiUrl}) | [Wiki Exchange]({OsrsWikiExchangeUrl})\nUpdated: {(DateTimeOffset.UtcNow - (LastUpdatedAt ?? DateTimeOffset.UtcNow)).Humanize(3, minUnit: TimeUnit.Second, maxUnit: TimeUnit.Minute)} ago.")
+        .WithDescription($"[GE-Tracker]({Url}) | [OSRS Exchange]({OsrsExchangeUrl}) | [RSB Exchange]({RsbExchangeUrl}) | [2007 Wiki]({WikiUrl ?? OsrsWikiUrl}) | [Wiki Exchange]({OsrsWikiExchangeUrl})")
         .WithUrl(Url)
-        .WithThumbnailUrl(IconUrl)
+        .WithThumbnailUrl(SpriteUrl)
         .WithAuthor("GE-Tracker", "https://cdn.discordapp.com/avatars/372857710229848064/f997ce46943f41a18bb089f6b41954af.png?size=128", Url)
-        .WithFooter($"Cached for the next: {(CachedUntil - DateTime.UtcNow).Humanize(3, minUnit: TimeUnit.Second, maxUnit: TimeUnit.Minute)}")
-        .AddField("Buying", $"Price: {$"{BuyingPrice:N0}"}{CustomEmoji.Gold}\nQuantity: {$"{BuyingQuantity:N0}"}", true)
-        .AddField("Average", $"Price: {$"{AveragePrice:N0}"}{CustomEmoji.Gold}", true)
-        .AddField("Selling", $"Price: {$"{SellingPrice:N0}"}{CustomEmoji.Gold}\nQuantity: {$"{SellingQuantity:N0}"}", true);
+        .AddField("Buying", $"Price: {$"{BuyingPrice:N0}"} {CustomEmoji.Gold}\nQuantity: {$"{BuyingQuantity:N0}"}", true)
+        .AddField("Average", $"Price: {$"{AveragePrice:N0}"} {CustomEmoji.Gold}", true)
+        .AddField("Selling", $"Price: {$"{SellingPrice:N0}"} {CustomEmoji.Gold}\nQuantity: {$"{SellingQuantity:N0}"}", true);
 
         if (ApproximateProfit.HasValue)
-            eb.AddField("Approx. Profit", $"{$"{ApproximateProfit:N0}"}{CustomEmoji.Gold}", true);
+            eb.AddField("Approx. Profit", $"{$"{ApproximateProfit:N0}"} {CustomEmoji.Gold}", true);
 
-        eb.AddField("Alch", $"Low: {$"{LowAlchemyValue:N0}"}{CustomEmoji.Gold}\nHigh: {$"{HighAlchemyValue:N0}"}{CustomEmoji.Gold}", true)
+        eb.AddField("Alch", $"Low: {$"{LowAlchemyValue:N0}"} {CustomEmoji.Gold}\nHigh: {$"{HighAlchemyValue:N0}"} {CustomEmoji.Gold}", true)
           .AddField("Buy Limit", BuyLimit.ToString("N0"), true);
 
         return eb.Build();

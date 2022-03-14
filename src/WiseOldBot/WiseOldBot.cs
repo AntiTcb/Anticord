@@ -14,6 +14,7 @@ public class WiseOldBot : DiscordBotBase
         builder.ConfigureServices((_, services) =>
         {
             services.AddHostedService<GeTrackerService>();
+            services.AddSingleton<ItemMap>();
             services.AddRestEaseClient<IGeTrackerApi>();
         });
 
