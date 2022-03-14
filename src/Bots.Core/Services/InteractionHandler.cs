@@ -60,7 +60,7 @@ internal class InteractionHandler : DiscordShardedClientService
     {
         if (!result.IsSuccess)
         {
-            Logger.LogError($"[{nameof(ContextCommandExecuted)}] {result.Error} {result.ErrorReason}");
+            Logger.LogError($"[{nameof(ComponentCommandExecuted)}] {result.Error} {result.ErrorReason}");
             switch (result.Error)
             {
                 case InteractionCommandError.UnmetPrecondition:
