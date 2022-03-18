@@ -14,7 +14,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.editorconfig = .editorconfig
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WiseOldBot", "src\WiseOldBot\WiseOldBot.csproj", "{7209FD37-822E-4446-A8AC-169D3EBB930E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WiseOldBot", "src\WiseOldBot\WiseOldBot.csproj", "{7209FD37-822E-4446-A8AC-169D3EBB930E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Angler", "src\Angler\Angler.csproj", "{E2C7D834-8F74-4520-939C-2F20D5B6A6FB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -34,6 +36,10 @@ Global
 		{7209FD37-822E-4446-A8AC-169D3EBB930E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7209FD37-822E-4446-A8AC-169D3EBB930E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7209FD37-822E-4446-A8AC-169D3EBB930E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E2C7D834-8F74-4520-939C-2F20D5B6A6FB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E2C7D834-8F74-4520-939C-2F20D5B6A6FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E2C7D834-8F74-4520-939C-2F20D5B6A6FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E2C7D834-8F74-4520-939C-2F20D5B6A6FB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -42,6 +48,7 @@ Global
 		{7C89C23D-0DD3-4593-942C-D7C5D74BB047} = {B9C15B3F-6CBC-40E7-9095-6E720FDD54BA}
 		{F430F3E4-853A-4C61-80BE-8E8C58DFAF42} = {B9C15B3F-6CBC-40E7-9095-6E720FDD54BA}
 		{7209FD37-822E-4446-A8AC-169D3EBB930E} = {B9C15B3F-6CBC-40E7-9095-6E720FDD54BA}
+		{E2C7D834-8F74-4520-939C-2F20D5B6A6FB} = {B9C15B3F-6CBC-40E7-9095-6E720FDD54BA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {76EF2EA1-A2A3-4345-9C42-DA6EE6E44C45}

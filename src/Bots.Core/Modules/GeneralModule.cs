@@ -9,15 +9,30 @@ using Microsoft.Extensions.Configuration;
 
 namespace Bots.Core.Modules;
 
-public class TestModule : InteractionModuleBase<ShardedInteractionContext>
+public class GeneralModule : InteractionModuleBase<ShardedInteractionContext>
 {
     public IConfiguration Configuration { get; set; } = null!;
 
-    [SlashCommand("echo", "Echos the input.")]
-    public async Task Echo(string input) => await RespondAsync(input);
+    [SlashCommand("invite", "Gets an invite URL for the bot to add to your Discord Server.")]
+    public async Task InviteUrlAsync()
+    {
+        var app = await Context.Client.GetApplicationInfoAsync().ConfigureAwait(false);
+        var eb = new EmbedBuilder
+        {
+            Title = "Click here to add me to your guild!",
+            Description = "**Note:** You must have the __Manage Server__ permission in the guild you want to add me to.",
+            Url = $"https://discord.com/api/oauth2/authorize?permissions=8&client_id={app.Id}&scope=bot%20applications.commands",
+            Author = new EmbedAuthorBuilder
+            {
+                Name = Context.Guild.CurrentUser.Nickname ?? Context.Client.CurrentUser.Username
+            },
+            ThumbnailUrl = app.IconUrl
+        };
+        await RespondAsync(embed: eb.Build(), ephemeral: true);
+    }
 
     [SlashCommand("info", "Information about the bot."), RequireBotPermission(ChannelPermission.EmbedLinks)]
-    public async Task Info()
+    public async Task BotInfoAsync()
     {
         var app = await Context.Client.GetApplicationInfoAsync();
         int channelCount = Context.Client.Guilds.Sum(g => g.Channels.Count);
@@ -46,7 +61,7 @@ public class TestModule : InteractionModuleBase<ShardedInteractionContext>
         eb.AddField("Channels", channelCount, true);
         eb.AddField("Users", memberCount, true);
 
-        await ReplyAsync("", embed: eb.Build());
+        await RespondAsync("", embed: eb.Build(), ephemeral: true);
     }
 
     private static string GetUptime()=> (DateTimeOffset.UtcNow - Process.GetCurrentProcess().StartTime).Humanize(5, true, maxUnit: TimeUnit.Month);
