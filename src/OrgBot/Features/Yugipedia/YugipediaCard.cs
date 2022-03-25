@@ -10,7 +10,9 @@ namespace OrgBot.Features.Yugipedia;
 public class YugipediaCard
 {
     private string _attribute = null!;
-    private static readonly string ZERO_WIDTH_SPACE = "\u200B";
+    private const string ZERO_WIDTH_SPACE = "\u200B";
+    private string image = null!;
+    private static readonly Regex _cardImageRegex = new(@"\d;\s(?<cardname>.+);.+", RegexOptions.Compiled);
 
     public string Attribute
     {
@@ -26,7 +28,15 @@ public class YugipediaCard
     [JsonProperty("def")]
     public string Defense { get; set; } = null!;
     [JsonProperty("image")]
-    public string Image { get; set; } = null!;
+    public string Image
+    {
+        get { return image; }
+        set
+        {
+            var match = _cardImageRegex.Match(value);
+            image = match.Success ? match.Groups["cardname"].Value : value;
+        }
+    }
     [JsonProperty("link_arrows")]
     public string LinkArrows { get; set; } = null!;
     [JsonProperty("lore")]

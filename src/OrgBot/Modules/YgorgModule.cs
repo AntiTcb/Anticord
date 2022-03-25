@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace OrgBot.Modules;
 
-public class YgorgModule : InteractionModuleBase<ShardedInteractionContext>
+public class YGOrgModule : InteractionModuleBase<ShardedInteractionContext>
 {
     [SlashCommand("latest_article", "Gets the latest article posted to YGOrganization.com")]
     public async Task GetLatestArticleAsync()
