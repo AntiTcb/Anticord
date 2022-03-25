@@ -1,8 +1,8 @@
 ﻿namespace Angler.Features.RSS;
 
-public class YGOrgRssReader : RssReader
+public class CardCoalRssReader : RssReader
 {
-    public YGOrgRssReader(IConfiguration configuration) : base(configuration["RssUrls:YGOrg"])
+    public CardCoalRssReader(IConfiguration configuration) : base(configuration["RssUrls:CardCoal"])
     {
 
     }
