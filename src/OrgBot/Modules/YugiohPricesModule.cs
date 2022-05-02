@@ -12,6 +12,16 @@ public class YugiohPricesModule : InteractionModuleBase<ShardedInteractionContex
     [RequireBotPermission(ChannelPermission.EmbedLinks)]
     public async Task GetCardPriceAsync([Summary("card_name", "Card name. Must be exact.")] string cardName, [Summary("number_of_sets", "Maximum number of sets to display.")]int numberOfSets = 5)
     {
+        var searchResults = await Api.SearchCardAndSetNames(cardName);
+        
+        if (searchResults.Length == 0)
+        {
+            await RespondAsync("Could not find card information. Double check your input, as the card name MUST be an exact match.");
+            return;
+        }
+
+        cardName = string.Equals(searchResults[0], cardName, StringComparison.OrdinalIgnoreCase) ? cardName : searchResults[0];
+
         var cardPrices = await Api.GetCardPriceAsync(cardName);
 
         if (cardPrices.Status == "fail" || cardPrices.Data is null)
