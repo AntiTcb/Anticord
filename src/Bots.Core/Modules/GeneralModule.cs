@@ -64,6 +64,6 @@ public class GeneralModule : InteractionModuleBase<ShardedInteractionContext>
         await RespondAsync("", embed: eb.Build(), ephemeral: true);
     }
 
-    private static string GetUptime()=> (DateTimeOffset.UtcNow - Process.GetCurrentProcess().StartTime).Humanize(5, true, maxUnit: TimeUnit.Month);
+    private static string GetUptime()=> (DateTimeOffset.UtcNow - Process.GetCurrentProcess().StartTime).Humanize(5, true, minUnit: TimeUnit.Second, maxUnit: TimeUnit.Month);
     private static string GetHeapSize() => Math.Round(GC.GetTotalMemory(true) / (1024.0 * 1024.0), 2).Megabytes().ToString();
 }
