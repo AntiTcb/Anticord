@@ -1,0 +1,13 @@
+﻿[Unit]
+Description=WiseOldBot Discord Service
+
+[Service]
+User=root
+WorkingDirectory=/
+ExecStart=/root/WiseOldBot/WiseOldBot
+Type=simple
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target

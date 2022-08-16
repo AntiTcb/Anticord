@@ -1,5 +1,6 @@
 ﻿using Discord;
 using Discord.Interactions;
+using Humanizer;
 using OrgBot.Features.YugiohPrices.Api;
 
 namespace OrgBot.Modules;
@@ -16,7 +17,7 @@ public class YugiohPricesModule : InteractionModuleBase<ShardedInteractionContex
         
         if (searchResults.Length == 0)
         {
-            await RespondAsync("Could not find card information. Double check your input, as the card name MUST be an exact match.");
+            await RespondAsync("Could not find card information. Double check your input, try to get as close to an exact match of the card name as possible.", ephemeral: true);
             return;
         }
 
@@ -26,12 +27,13 @@ public class YugiohPricesModule : InteractionModuleBase<ShardedInteractionContex
 
         if (cardPrices.Status == "fail" || cardPrices.Data is null)
         {
-            await RespondAsync("Could not find card information. Double check your input, as the card name MUST be an exact match.");
+            await RespondAsync("Could not find card information. Double check your input, try to get as close to an exact match of the card name as possible.", ephemeral: true);
             return;
         }
 
         var eb = new EmbedBuilder()
             .WithTitle(cardPrices.Data.First().Name)
+            .WithDescription(searchResults[0].Humanize())
             .WithAuthor("YugiohPrices.com", "https://yugiohprices.com/img/banner.png", "https://yugiohprices.com")
             .WithThumbnailUrl("https://yugiohprices.com/img/banner.png")
             .WithCurrentTimestamp()

@@ -23,6 +23,7 @@ public class DiscordBotBase
 
         return Host.CreateDefaultBuilder(args)
             .UseSerilog()
+            .UseSystemd()
             .ConfigureDiscordShardedHost((context, config) =>
             {
                 config.SocketConfig = new()
@@ -45,7 +46,7 @@ public class DiscordBotBase
             .ConfigureServices((_, services) =>
             {
                 services.AddHostedService<InteractionHandler>();
-                services.AddSingleton<ScriptService>();
+                //services.AddSingleton<ScriptService>();
                 services.AddSingleton<Fergun.Interactive.InteractiveService>();
             });
     }

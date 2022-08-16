@@ -18,7 +18,7 @@ public class YugipediaModule : InteractionModuleBase<ShardedInteractionContext>
             var card = await Yugipedia.GetCardAsync(cardName);
             if (card is null)
             {
-                await RespondAsync("Couldn't find a matching card in the TCG/OCG.");
+                await RespondAsync("Couldn't find a matching card in the TCG/OCG.", ephemeral: true);
                 return;
             }
 
@@ -26,7 +26,7 @@ public class YugipediaModule : InteractionModuleBase<ShardedInteractionContext>
         }
         catch (TimeoutException e) when (e.Message == "The Yugipedia API timed out; please try again.")
         {
-            await RespondAsync(e.Message);
+            await RespondAsync(e.Message, ephemeral: true);
 
             var eb = new EmbedBuilder
             {
