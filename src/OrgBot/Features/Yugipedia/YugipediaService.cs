@@ -36,9 +36,9 @@ public class YugipediaService
             if (string.IsNullOrEmpty(page.Content) || page.NamespaceId != 0 || !page.Content.Contains("{{CardTable2")) return null;
 
             var propDict = new Dictionary<string, string>
-                {
-                    { "en_name", page.Title }
-                };
+            {
+                { "en_name", page.Title }
+            };
 
             var props = _cardTableParser.Matches(page.Content)
                 .OfType<Match>()
