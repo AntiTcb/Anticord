@@ -9,7 +9,7 @@ public class YugipediaService
 {
     public WikiSite Site { get; set; }
 
-    private static readonly Regex _cardTableParser = new(@"\|\s([\w|_]+)\s*=\s(.*)", RegexOptions.Compiled);
+    private static readonly Regex _cardTableParser = new(@"\|\s([\w|_]+)\s*=\s+(.*)", RegexOptions.Compiled);
     private static readonly Regex _searchFiltering = new(@"\((anime|BAM)\)", RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
     public YugipediaService(WikiSite site)
@@ -45,7 +45,7 @@ public class YugipediaService
                 .Select(m => (m.Groups[1].Value, m.Groups[2].Value));
 
             foreach (var (key, value) in props)
-                propDict[key] = value;
+                propDict[key] = key == "image" && value.Contains("1;") ? Regex.Replace(value, @"1;\s+(.+);.+", "$1") : value;
 
             // TODO: This is so hackily bad.
             var settings = new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore };
