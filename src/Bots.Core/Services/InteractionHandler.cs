@@ -51,7 +51,7 @@ internal class InteractionHandler : DiscordShardedClientService
         var modules = await _interactionService.AddModulesAsync(assembly, _provider);
         foreach (var module in modules)
         {
-            Logger.LogInformation($"Loaded module {module.Name}, with {module.ComponentCommands.Count} Component Commands, {module.SlashCommands.Count} Slash Commands,"
+            Logger.LogInformation($"Loaded module {module.Name}, with {module.ComponentCommands.Count} Component Commands, {module.SlashCommands.Count} Slash Commands, "
                 + $"{module.ModalCommands.Count} Modal Commands, {module.AutocompleteCommands.Count} Autocomplete Commands, and {module.ContextCommands.Count} Context Commands.");
         }
     }
@@ -116,7 +116,7 @@ internal class InteractionHandler : DiscordShardedClientService
         return Task.CompletedTask;
     }
 
-    private Task SlashCommandExecuted(SlashCommandInfo commandInfo, IInteractionContext context, IResult result)
+    private async Task SlashCommandExecuted(SlashCommandInfo commandInfo, IInteractionContext context, IResult result)
     {
         if (!result.IsSuccess)
         {
@@ -133,8 +133,13 @@ internal class InteractionHandler : DiscordShardedClientService
                     // implement
                     break;
                 case InteractionCommandError.Exception:
-                    context.Interaction.RespondAsync("Oops, I ran into an exception. Please try the command again.");
-                    // implement
+                    await context.Interaction.RespondAsync("Oops, I ran into an exception. Please try the command again.");
+                    var logChannel = await context.Client.GetChannelAsync(_configuration.GetValue<ulong>("Discord:LogChannelId")) as IMessageChannel;
+                    await logChannel!.SendMessageAsync("", embed:
+                        new EmbedBuilder()
+                        .WithTitle(result.Error.ToString())
+                        .WithDescription(result.ErrorReason)
+                        .Build());
                     break;
                 case InteractionCommandError.Unsuccessful:
                     // implement
@@ -143,8 +148,6 @@ internal class InteractionHandler : DiscordShardedClientService
                     break;
             }
         }
-
-        return Task.CompletedTask;
     }
 
 

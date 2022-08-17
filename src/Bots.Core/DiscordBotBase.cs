@@ -1,4 +1,5 @@
-﻿using Bots.Core.Services;
+﻿using System.Diagnostics;
+using Bots.Core.Services;
 using Bots.Core.Services.Scripting;
 using Discord;
 using Discord.Addons.Hosting;
@@ -19,6 +20,7 @@ public class DiscordBotBase
             .MinimumLevel.Debug()
             .MinimumLevel.Override("Microsoft", LogEventLevel.Error)
             .WriteTo.Console()
+            .WriteTo.File(Path.Combine("./logs", $"{Process.GetCurrentProcess().ProcessName}.log"), restrictedToMinimumLevel: LogEventLevel.Error)
             .CreateLogger();
 
         return Host.CreateDefaultBuilder(args)
