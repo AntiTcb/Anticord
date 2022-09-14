@@ -1,4 +1,5 @@
-﻿using Discord.Addons.Hosting;
+﻿using Discord;
+using Discord.Addons.Hosting;
 using Discord.WebSocket;
 using WiseOldBot.Features.GeTracker.Api;
 using WiseOldBot.Features.GeTracker.Api.Models;
@@ -59,7 +60,7 @@ public class GeTrackerService : DiscordShardedClientService
 
         _logger.LogInformation(logMessage);
 
-        if (Client.GetChannel(Configuration.GetValue<ulong>("Discord:LogChannelId")) is not SocketTextChannel logChannel) return;
+        if (Client.GetChannel(Configuration.GetValue<ulong>("Discord:LogChannelId")) is not IMessageChannel logChannel) return;
         await logChannel!.SendMessageAsync(logMessage);
     }
 
