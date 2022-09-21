@@ -63,7 +63,7 @@ public class YugipediaCard
     public string? Types { get; set; }
 
     public int? LinkRating => LinkArrows?.Split(',')?.Length;
-    public string Description => Format.ResolveMarkup(DescriptionRaw);
+    public string Description => Format.ResolveMarkup(DescriptionRaw ?? "");
     public string ImageUrl => $"https://yugipedia.com/wiki/Special:FilePath/{Image}";
     public string? PendulumEffect => Format.ResolveMarkup(PendulumEffectRaw ?? "");
     public string YGOrgDbLink => $"https://db.ygorganization.com/card#{DatabaseId}";

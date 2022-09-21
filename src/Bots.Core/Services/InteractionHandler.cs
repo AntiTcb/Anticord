@@ -135,10 +135,13 @@ internal class InteractionHandler : DiscordShardedClientService
                 case InteractionCommandError.Exception:
                     await context.Interaction.RespondAsync("Oops, I ran into an exception. Please try the command again.");
                     var logChannel = await context.Client.GetChannelAsync(_configuration.GetValue<ulong>("Discord:LogChannelId")) as IMessageChannel;
-                    await logChannel!.SendMessageAsync("", embed:
+                    await logChannel!.SendMessageAsync($"{commandInfo.Name} command failed", embed:
                         new EmbedBuilder()
                         .WithTitle(result.Error.ToString())
-                        .WithDescription(result.ErrorReason)
+                        .WithDescription($"{result.ErrorReason} {((result is ExecuteResult exResult1) ? exResult1.Exception.StackTrace?.ToString() : "None")}")
+                        .AddField("Guild", context.Guild.Name)
+                        .AddField("User", context.User.ToString())
+                        .AddField("Exception", (result is ExecuteResult exResult2) ? exResult2.Exception.ToString() : "None")
                         .Build());
                     break;
                 case InteractionCommandError.Unsuccessful:
