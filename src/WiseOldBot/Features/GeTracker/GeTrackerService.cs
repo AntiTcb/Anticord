@@ -21,7 +21,7 @@ public class GeTrackerService : DiscordShardedClientService
         Items = items;
         _logger = logger;
         Api = api;
-        Api.Token = Configuration["GeTracker:ApiKey"];
+        Api.Token = Configuration["GeTracker:ApiKey"] ?? throw new ArgumentNullException(nameof(Api.Token), "GE Tracker API Key is not configured.");
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -36,7 +36,14 @@ public class GeTrackerService : DiscordShardedClientService
         while (!stoppingToken.IsCancellationRequested)
         {
             await Task.Delay(TimeSpan.FromMinutes(15), stoppingToken);
-            await RebuildItemMapAsync();
+            try
+            {
+                await RebuildItemMapAsync();
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Error rebuilding item map");
+            }
         }
     }
 

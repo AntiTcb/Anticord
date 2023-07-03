@@ -25,7 +25,7 @@ public class YugiohPricesModule : InteractionModuleBase<ShardedInteractionContex
 
         var cardPrices = await Api.GetCardPriceAsync(cardName);
 
-        if (cardPrices.Status == "fail" || cardPrices.Data is null)
+        if (cardPrices.Status == "fail" || cardPrices.Data is null || !cardPrices.Data.Any())
         {
             await RespondAsync("Could not find card information. Double check your input, try to get as close to an exact match of the card name as possible.", ephemeral: true);
             return;
