@@ -7,3 +7,4 @@ public record CardSet(
     [property: JsonProperty("print_tag")] string PrintTag,
     [property: JsonProperty("rarity")] string Rarity,
     [property: JsonProperty("price_data")] PriceDataWrapper PriceData);
+

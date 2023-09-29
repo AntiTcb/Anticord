@@ -69,6 +69,7 @@ public class YugipediaCard
     public string YGOrgDbLink => $"https://db.ygorganization.com/card#{DatabaseId}";
     public string KonamiDbLink => $"https://www.db.yugioh-card.com/yugiohdb/card_search.action?ope=2&cid={DatabaseId}";
     public string KonamiFAQLink => $"https://www.db.yugioh-card.com/yugiohdb/faq_search.action?ope=4&cid={DatabaseId}&request_locale=ja";
+    public string TcgPlayerLink => $"https://shop.tcgplayer.com/yugioh/product/show?newSearch=false&IsProductNameExact=false&ProductName={Uri.EscapeDataString(Name)}&Type=Cards&orientation=list&partner=YGORGANIZATIONDISCORDBOT&utm_campaign=affiliate&utm_medium=YGORGANIZATIONDISCORDBOT&utm_source=YGORGANIZATIONDISCORDBOT";
 
     public Embed ToEmbed()
     {
@@ -122,7 +123,7 @@ public class YugipediaCard
             ThumbnailUrl = ImageUrl,
             Url = $"https://yugipedia.com/wiki/{Uri.EscapeDataString(Name)}"
         }
-        .AddField("Links", $"[Konami DB]({KonamiDbLink}) | [Konami FAQ (Japanese)]({KonamiFAQLink}) | [YGOrg DB Rulings]({YGOrgDbLink})");
+        .AddField("Links", $"[Konami DB]({KonamiDbLink}) | [Konami FAQ (Japanese)]({KonamiFAQLink}) | [YGOrg DB Rulings]({YGOrgDbLink}) | [TCGPlayer]({TcgPlayerLink})");
 
         return em.Build();
     }

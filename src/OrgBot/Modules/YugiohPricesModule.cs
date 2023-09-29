@@ -40,12 +40,17 @@ public class YugiohPricesModule : InteractionModuleBase<ShardedInteractionContex
             .WithFooter("Prices brought to you courtesy of YugiohPrices.com");
 
         var setData = cardPrices.Data
-            .OrderByDescending(p => p.PriceData.Data.Prices.Average)
+            .OrderByDescending(p => p.PriceData.Data?.Prices.Average)
             .Take(numberOfSets)
-            .ToDictionary(p => $"{p.Name} | {p.PrintTag} | {p.Rarity}", p => p.PriceData.Data.Prices);
+            .ToDictionary(p => $"{p.Name} | {p.PrintTag} | {p.Rarity}", p => p.PriceData.Data?.Prices);
 
         foreach (var (SetName, SetPrices) in setData)
         {
+            if (SetPrices is null)
+            {
+                eb.AddField(SetName, "No price data available");
+                continue;
+            }
             var (High, Low, Average) = (SetPrices.High, SetPrices.Low, SetPrices.Average);
             eb.AddField(SetName, $"Low: {Low:C} | Avg: {Average:C} | High: {High:C}");
         }

@@ -31,7 +31,6 @@ public class DiscordBotBase
                 config.SocketConfig = new()
                 {
                     LogLevel = LogSeverity.Verbose,
-                    AlwaysDownloadUsers = true,
                     MessageCacheSize = 200,
                     GatewayIntents = GatewayIntents.AllUnprivileged,
                 };
