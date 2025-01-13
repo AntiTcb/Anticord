@@ -5,12 +5,9 @@ using WikiClientLibrary.Sites;
 
 namespace OrgBot.Features.Yugipedia;
 
-public class YugipediaService
+public partial class YugipediaService
 {
     public WikiSite Site { get; set; }
-
-    private static readonly Regex _cardTableParser = new(@"\|\s([\w|_]+)\s*=\s+(.*)", RegexOptions.Compiled);
-    private static readonly Regex _searchFiltering = new(@"\((anime|BAM)\)", RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
     public YugipediaService(WikiSite site)
         => Site = site;
@@ -20,7 +17,7 @@ public class YugipediaService
         var requestProcess = "Start.";
         try
         {
-            var searchResults = (await Site.OpenSearchAsync(cardName)).Where(r => !_searchFiltering.IsMatch(r.Url));
+            var searchResults = (await Site.OpenSearchAsync(cardName)).Where(r => !SearchFiltering().IsMatch(r.Url));
             requestProcess = "After search.";
 
             if (!searchResults.Any()) return null;
@@ -40,12 +37,12 @@ public class YugipediaService
                 { "en_name", page.Title }
             };
 
-            var props = _cardTableParser.Matches(page.Content)
+            var props = CardTableParser().Matches(page.Content)
                 .OfType<Match>()
                 .Select(m => (m.Groups[1].Value, m.Groups[2].Value));
 
             foreach (var (key, value) in props)
-                propDict[key] = key == "image" && value.Contains("1;") ? Regex.Replace(value, @"(?:1;\s+)([^;\n]+)(?:.*)", "$1") : value;
+                propDict[key] = key == "image" && value.Contains("1;") ? PropertyParser().Replace(value, "$1") : value;
 
             // TODO: This is so hackily bad.
             var settings = new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore };
@@ -60,4 +57,11 @@ public class YugipediaService
             throw ex;
         }
     }
+
+    [GeneratedRegex(@"\|\s([\w|_]+)\s*=\s+(.*)", RegexOptions.Compiled)]
+    private static partial Regex CardTableParser();
+    [GeneratedRegex(@"\((anime|BAM)\)", RegexOptions.IgnoreCase | RegexOptions.Compiled, "en-US")]
+    private static partial Regex SearchFiltering();
+    [GeneratedRegex("(?:1;\\s+)([^;\\n]+)(?:.*)")]
+    private static partial Regex PropertyParser();
 }

@@ -1,6 +1,7 @@
 ﻿using Discord;
 using Discord.Addons.Hosting;
 using Discord.WebSocket;
+using Humanizer;
 using WiseOldBot.Features.GeTracker.Api;
 using WiseOldBot.Features.GeTracker.Api.Models;
 
@@ -61,14 +62,18 @@ public class GeTrackerService : DiscordShardedClientService
         if (newItems.Count == 0) return;
 
         foreach (var item in newItems)
-            Items.Add(item.Key.ToLower(), item.Value);
+        {
+            var wasAdded = Items.TryAdd(item.Key.ToLower(), item.Value);
+            if (!wasAdded)
+                Items[item.Key.ToLower()] = item.Value;
+        }
 
         string logMessage = $"Item map rebuild! New Items: {string.Join(", ", newItems.Select(i => i.Key))}";
 
         _logger.LogInformation(logMessage);
 
         if (Client.GetChannel(Configuration.GetValue<ulong>("Discord:LogChannelId")) is not IMessageChannel logChannel) return;
-        await logChannel!.SendMessageAsync(logMessage);
+        await logChannel!.SendMessageAsync(logMessage.Truncate(2000));
     }
 
     private static Dictionary<string, List<GeTrackerItem>> TransformItemCollection(IEnumerable<Item> items)

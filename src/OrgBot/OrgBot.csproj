@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Worker">
 
   <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net9.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>dotnet-OrgBot-B067042A-0B6D-478B-8991-F44EA60C7398</UserSecretsId>
@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="CXuesong.MW.WikiClientLibrary" Version="0.7.5" />
+    <PackageReference Include="CXuesong.MW.WikiClientLibrary" Version="0.8.0" />
   </ItemGroup>
 
   <ItemGroup>

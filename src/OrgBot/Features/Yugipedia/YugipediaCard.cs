@@ -7,12 +7,11 @@ using static Discord.Format;
 
 namespace OrgBot.Features.Yugipedia;
 
-public class YugipediaCard
+public partial class YugipediaCard
 {
     private string _attribute = null!;
     private const string ZERO_WIDTH_SPACE = "\u200B";
     private string image = null!;
-    private static readonly Regex _cardImageRegex = new(@"\d;\s(?<cardname>.+);.+", RegexOptions.Compiled);
 
     public string Attribute
     {
@@ -33,13 +32,13 @@ public class YugipediaCard
         get { return image; }
         set
         {
-            var match = _cardImageRegex.Match(value);
+            var match = CardImageRegex().Match(value);
             image = match.Success ? match.Groups["cardname"].Value : value;
         }
     }
     [JsonProperty("link_arrows")]
     public string LinkArrows { get; set; } = null!;
-    [JsonProperty("lore")]
+    [JsonProperty("text")]
     public string DescriptionRaw { get; set; } = null!;
     [JsonProperty("level")]
     public int Level { get; set; }
@@ -62,6 +61,7 @@ public class YugipediaCard
     [JsonProperty("types")]
     public string? Types { get; set; }
 
+    public bool HasDatabaseId => int.TryParse(DatabaseId, out var _);
     public int? LinkRating => LinkArrows?.Split(',')?.Length;
     public string Description => Format.ResolveMarkup(DescriptionRaw ?? "");
     public string ImageUrl => $"https://yugipedia.com/wiki/Special:FilePath/{Image}";
@@ -69,7 +69,7 @@ public class YugipediaCard
     public string YGOrgDbLink => $"https://db.ygorganization.com/card#{DatabaseId}";
     public string KonamiDbLink => $"https://www.db.yugioh-card.com/yugiohdb/card_search.action?ope=2&cid={DatabaseId}";
     public string KonamiFAQLink => $"https://www.db.yugioh-card.com/yugiohdb/faq_search.action?ope=4&cid={DatabaseId}&request_locale=ja";
-    public string TcgPlayerLink => $"https://shop.tcgplayer.com/yugioh/product/show?newSearch=false&IsProductNameExact=false&ProductName={Uri.EscapeDataString(Name)}&Type=Cards&orientation=list&partner=YGORGANIZATIONDISCORDBOT&utm_campaign=affiliate&utm_medium=YGORGANIZATIONDISCORDBOT&utm_source=YGORGANIZATIONDISCORDBOT";
+    public string TcgPlayerLink => $"https://tcgplayer.pxf.io/antitcb?u={Uri.EscapeDataString($"https://shop.tcgplayer.com/yugioh/product/show?newSearch=false&IsProductNameExact=false&ProductName={Name}&Type=Cards&orientation=list")}";
 
     public Embed ToEmbed()
     {
@@ -77,7 +77,35 @@ public class YugipediaCard
         bool isXyz = Types?.Contains("Xyz", StringComparison.OrdinalIgnoreCase) ?? false;
         bool isLink = Types?.Contains("Link", StringComparison.OrdinalIgnoreCase) ?? false;
         bool isSynchro = Types?.Contains("Synchro", StringComparison.OrdinalIgnoreCase) ?? false;
+        bool isFusion = Types?.Contains("Fusion", StringComparison.OrdinalIgnoreCase) ?? false;
+        bool isRitual = Types?.Contains("Ritual", StringComparison.OrdinalIgnoreCase) ?? false;
+        bool isEffect = Types?.Contains("Effect", StringComparison.OrdinalIgnoreCase) ?? false;
+
         bool isSpellOrTrap = !string.IsNullOrWhiteSpace(CardType);
+
+        uint color;
+        if (isXyz)
+            color = 0x000000;
+        else if (isLink)
+            color = 0x00008B;
+        else if (isSynchro)
+            color = 0xEEEEEE;
+        else if (isFusion)
+            color = 0xA086B7;
+        else if (isRitual)
+            color = 0x9DB5CC;
+        else if (isEffect)
+            color = 0xFF8B53;
+        else if (isSpellOrTrap)
+            color = CardType switch
+            {
+                "Spell" => 0x1D9E74,
+                "Trap" => 0xBC5A84,
+                _ => 0x000000
+            };
+        else
+            color = 0xFDE68A;
+
 
         var descriptionBuilder = new StringBuilder(ZERO_WIDTH_SPACE);
 
@@ -108,7 +136,14 @@ public class YugipediaCard
             }
         }
 
-        descriptionBuilder.AppendLine($"\n{Bold("Description")}\n{Description}");
+        descriptionBuilder.AppendLine($"\n{Bold("Description")}\n{Description.Replace("<br />", "\n")}");
+
+        var links = new StringBuilder();
+
+        if (int.TryParse(DatabaseId, out var _))
+            links.Append($"[Konami DB]({KonamiDbLink}) | [Konami FAQ (Japanese)]({KonamiFAQLink}) | [YGOrg DB]({YGOrgDbLink}) | ");
+
+        links.Append($"[TCGPlayer]({TcgPlayerLink})");
 
         var em = new EmbedBuilder
         {
@@ -123,23 +158,28 @@ public class YugipediaCard
             ThumbnailUrl = ImageUrl,
             Url = $"https://yugipedia.com/wiki/{Uri.EscapeDataString(Name)}"
         }
-        .AddField("Links", $"[Konami DB]({KonamiDbLink}) | [Konami FAQ (Japanese)]({KonamiFAQLink}) | [YGOrg DB Rulings]({YGOrgDbLink}) | [TCGPlayer]({TcgPlayerLink})");
+        .WithColor(color)
+        .AddField("Links", links.ToString());
 
         return em.Build();
     }
 
-    public static class Format
+    public static partial class Format
     {
-        const string mediawikiMarkupPattern = @"\[\[(?<NormalText>[^|[\]]+)(?:\|?(?<Vanity>[^|[\]]+)?)\]\]";
-        private static readonly Regex markupMatcher = new(mediawikiMarkupPattern, RegexOptions.Compiled);
-        private static readonly Regex htmlNewline = new(@"<br\s?/?>", RegexOptions.Compiled | RegexOptions.IgnoreCase);
-
         public static string ResolveMarkup(string markup)
         {
             static string ReplaceMatch(Match m) => m.Groups["Vanity"].Success ? m.Groups["Vanity"].Value : m.Groups["NormalText"].Value;
 
-            string resolvedMarkdown = markupMatcher.Replace(markup, ReplaceMatch);
-            return htmlNewline.Replace(resolvedMarkdown, "\n");
+            string resolvedMarkdown = MediawikiMarkup().Replace(markup, ReplaceMatch);
+            return HtmlNewline().Replace(resolvedMarkdown, "\n");
         }
+
+        [GeneratedRegex(@"\[\[(?<NormalText>[^|[\]]+)(?:\|?(?<Vanity>[^|[\]]+)?)\]\]", RegexOptions.Compiled)]
+        private static partial Regex MediawikiMarkup();
+        [GeneratedRegex(" < br\\s?/?>", RegexOptions.IgnoreCase | RegexOptions.Compiled, "en-US")]
+        private static partial Regex HtmlNewline();
     }
+
+    [GeneratedRegex(@"\d;\s(?<cardname>.+);.+", RegexOptions.Compiled)]
+    private static partial Regex CardImageRegex();
 }
