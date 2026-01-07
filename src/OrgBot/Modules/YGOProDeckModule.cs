@@ -1,7 +1,9 @@
-﻿using System.Text;
+﻿using System.Collections.Generic;
+using System.Text;
 using Discord;
 using Discord.Interactions;
 using OrgBot.Features.YGOProDeck.Api;
+using OrgBot.Features.YGOProDeck.Api.Models;
 using RestEase;
 
 namespace OrgBot.Modules;
@@ -35,11 +37,44 @@ public class YGOProDeckModule : InteractionModuleBase<ShardedInteractionContext>
 
             var sb = new StringBuilder();
 
-            foreach (var set in card.CardSets.Take(25))
+            foreach (var g in card.CardSets.GroupBy(x => x.SetRarity).OrderBy(x => x.Key))
             {
-                if (set is null) continue;
+                var innerSb = new StringBuilder();
+                innerSb.AppendLine($"# {g.Key}");
 
-                sb.AppendLine($"# {set.SetCode} | {set.SetRarity}\n - Low: ${set.PriceLow:C} | Avg: ${set.SetPrice:C}");
+                var ordered = g.OrderBy(x => x.PriceLow).ToList();
+                var toShow = new List<CardSet>();
+
+                if (ordered.Count <= 4)
+                {
+                    toShow = ordered;
+                }
+                else
+                {
+                    // Lowest and highest
+                    toShow.Add(ordered.First());
+                    toShow.Add(ordered.Last());
+
+                    // Up to 2 from the middle
+                    var middle = ordered.Skip(1).Take(ordered.Count - 2).ToList();
+                    toShow.AddRange(middle.Take(2));
+                }
+
+                foreach (var set in toShow)
+                {
+                    innerSb.AppendLine($"- {set.SetCode,-10} | Low: ${set.PriceLow:C} | Avg: ${set.SetPrice:C}");
+                }
+
+                var omitted = ordered.Count - toShow.Count;
+                if (omitted > 0)
+                {
+                    innerSb.AppendLine($"(Omitted {omitted} results...)");
+                }
+
+                if (sb.Length < 3900 && innerSb.Length + sb.Length <= 3900)
+                    sb.Append(innerSb);
+                else
+                    break;
             }
 
             eb.WithDescription(Format.Code(sb.ToString(), "md") + "\n" + Format.Url("Buy the card now at TCGPlayer!", card.TcgPlayerLink));
