@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace OrgBot.Features.YugiohPrices.Api;
+namespace OrgBot.Features.YGOProDeck.Api.Models;
 
 public record ApiResponse<T>(
     [property: JsonProperty("status")] string Status,

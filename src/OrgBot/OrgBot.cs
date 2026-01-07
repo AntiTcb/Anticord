@@ -1,6 +1,6 @@
 using System.Reflection;
 using Bots.Core;
-using OrgBot.Features.YugiohPrices.Api;
+using OrgBot.Features.YGOProDeck.Api;
 using OrgBot.Features.Yugipedia;
 using RestEase.HttpClientFactory;
 using WikiClientLibrary.Client;
@@ -18,7 +18,7 @@ public class OrgBot : DiscordBotBase
         {
             services.AddSingleton<YugipediaService>();
             services.AddSingleton(new WikiSite(new WikiClient { ClientUserAgent = $"OrgBot/{Assembly.GetEntryAssembly()!.GetName().Version} (AntiTcb#0001)" }, "https://yugipedia.com/api.php"));
-            services.AddRestEaseClient<IYugiohPricesApi>();
+            services.AddRestEaseClient<IYGOProDeckApi>();
         });
 
         return builder;

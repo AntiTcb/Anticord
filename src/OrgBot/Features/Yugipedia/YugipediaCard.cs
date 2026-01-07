@@ -69,7 +69,7 @@ public partial class YugipediaCard
     public string YGOrgDbLink => $"https://db.ygorganization.com/card#{DatabaseId}";
     public string KonamiDbLink => $"https://www.db.yugioh-card.com/yugiohdb/card_search.action?ope=2&cid={DatabaseId}";
     public string KonamiFAQLink => $"https://www.db.yugioh-card.com/yugiohdb/faq_search.action?ope=4&cid={DatabaseId}&request_locale=ja";
-    public string TcgPlayerLink => $"https://tcgplayer.pxf.io/antitcb?u={Uri.EscapeDataString($"https://shop.tcgplayer.com/yugioh/product/show?newSearch=false&IsProductNameExact=false&ProductName={Name}&Type=Cards&orientation=list")}";
+    public string TcgPlayerLink => $"https://partner.tcgplayer.com/antitcb?u={Uri.EscapeDataString($"https://shop.tcgplayer.com/yugioh/product/show?newSearch=false&IsProductNameExact=false&ProductName={Name}&Type=Cards&orientation=list")}";
 
     public Embed ToEmbed()
     {
