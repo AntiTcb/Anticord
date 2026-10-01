@@ -6,7 +6,7 @@ public readonly record struct Item (
 	[property: JsonProperty("approxProfit")] long? ApproximateProfit,
 	[property: JsonProperty("buyLimit")] int BuyLimit,
 	[property: JsonProperty("buyPriceCurrent")] bool IsBuyPriceCurrent,
-	[property: JsonProperty("buying")] int BuyingPrice,
+	[property: JsonProperty("buying")] long BuyingPrice,
 	[property: JsonProperty("buyingQuantity")] int BuyingQuantity,
 	[property: JsonProperty("cachedUntil")] DateTime CachedUntil,
 	[property: JsonProperty("highAlch")] int HighAlchemyValue,
