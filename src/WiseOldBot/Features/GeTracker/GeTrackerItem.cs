@@ -8,7 +8,7 @@ public readonly record struct GeTrackerItem (
     long? ApproximateProfit,
     int BuyLimit,
     bool IsBuyPriceCurrent,
-    int BuyingPrice,
+    long BuyingPrice,
     int BuyingQuantity,
     DateTime CachedUntil,
     int HighAlchemyValue,
