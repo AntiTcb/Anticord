@@ -13,7 +13,5 @@ public class ItemMap : Dictionary<string, List<GeTrackerItem>>
     }
 
     private IReadOnlyCollection<GeTrackerItem> FindItems(string itemName)
-        => this.Where(x => x.Key.Contains(itemName.ToLower()))
-        .SelectMany(kvp => kvp.Value)
-        .ToArray();
+        => [.. this.Where(x => x.Key.Contains(itemName, StringComparison.CurrentCultureIgnoreCase)).SelectMany(kvp => kvp.Value)];
 }

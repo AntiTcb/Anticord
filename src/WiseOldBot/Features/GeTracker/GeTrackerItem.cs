@@ -1,13 +1,11 @@
 ﻿using Discord;
-using Humanizer.Localisation;
-using Humanizer;
 using WiseOldBot.Features.GeTracker.Api;
 using WiseOldBot.Features.GeTracker.Api.Models;
 
 namespace WiseOldBot.Features.GeTracker;
 
 public readonly record struct GeTrackerItem (
-    int? ApproximateProfit,
+    long? ApproximateProfit,
     int BuyLimit,
     bool IsBuyPriceCurrent,
     int BuyingPrice,
@@ -22,9 +20,9 @@ public readonly record struct GeTrackerItem (
     int LowAlchemyValue,
     bool IsMembersItem,
     string Name,
-    int AveragePrice,
+    long AveragePrice,
     bool IsSellPriceCurrent,
-    int SellingPrice,
+    long SellingPrice,
     int SellingQuantity,
     int TaxAmount,
     DateTime? LastUpdatedAt,

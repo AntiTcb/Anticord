@@ -3,7 +3,7 @@
 namespace WiseOldBot.Features.GeTracker.Api.Models;
 
 public readonly record struct Item (
-	[property: JsonProperty("approxProfit")] int? ApproximateProfit,
+	[property: JsonProperty("approxProfit")] long? ApproximateProfit,
 	[property: JsonProperty("buyLimit")] int BuyLimit,
 	[property: JsonProperty("buyPriceCurrent")] bool IsBuyPriceCurrent,
 	[property: JsonProperty("buying")] int BuyingPrice,
@@ -18,9 +18,9 @@ public readonly record struct Item (
 	[property: JsonProperty("lowAlch")] int LowAlchemyValue,
 	[property: JsonProperty("members")] bool IsMembersItem,
 	[property: JsonProperty("name")] string Name,
-	[property: JsonProperty("overall")] int AveragePrice,
+	[property: JsonProperty("overall")] long AveragePrice,
 	[property: JsonProperty("sellPriceCurrent")] bool IsSellPriceCurrent,
-	[property: JsonProperty("selling")] int SellingPrice,
+	[property: JsonProperty("selling")] long SellingPrice,
 	[property: JsonProperty("sellingQuantity")] int SellingQuantity,
 	[property: JsonProperty("slug")] string? Slug,
 	[property: JsonProperty("tax")] int TaxAmount,
